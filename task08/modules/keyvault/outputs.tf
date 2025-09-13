@@ -3,7 +3,7 @@ output "id" {
   value       = azurerm_key_vault.this.id
 }
 
-output "name" { 
+output "name" {
   description = "Key Vault resource name"
-  value = azurerm_key_vault.this.name 
-  }
+  value       = azurerm_key_vault.this.name
+}

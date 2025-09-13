@@ -3,12 +3,12 @@ resource "azurerm_container_registry" "this" {
   resource_group_name = var.acr_resourse_group
   location            = var.acr_location
   sku                 = var.acr_SKU
-  tags = var.tags
-  admin_enabled = true
+  tags                = var.tags
+  admin_enabled       = true
 }
 
 resource "azurerm_container_registry_task" "this" {
-  name = var.acr_task_name
+  name                  = var.acr_task_name
   container_registry_id = azurerm_container_registry.this.id
   platform {
     os = "Linux"
@@ -17,7 +17,7 @@ resource "azurerm_container_registry_task" "this" {
     dockerfile_path      = "Dockerfile"
     context_path         = "https://github.com/LuisOctavio1/terraform_aks_task.git#master:task08/application"
     context_access_token = var.git_pat
-    image_names = ["${var.image_name}:latest"]
+    image_names          = ["${var.image_name}:latest"]
   }
 }
 

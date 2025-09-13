@@ -1,40 +1,40 @@
 variable "redis_name" {
-    description = "redis name"
-  type = string
+  description = "redis name"
+  type        = string
 }
 
 variable "redis_rg" {
-    description = "redis resource group"
-  type = string
+  description = "redis resource group"
+  type        = string
 }
 
 variable "redis_location" {
-    description = "redis location"
-    type = string
-  
+  description = "redis location"
+  type        = string
+
 }
 
 variable "redis_sku" {
-    description = "sku of redis"
-  type = string
+  description = "sku of redis"
+  type        = string
 }
 
 variable "redis_sku_family" {
-    description = "redis sku family"
-    type = string
+  description = "redis sku family"
+  type        = string
 }
 
 variable "redis_capacity" {
-    description = "redis capacity"
-    type = number
+  description = "redis capacity"
+  type        = number
 }
 
 variable "redis_kv_id" {
   description = "key vault id for the hostname and pw"
-  type = string
+  type        = string
 }
 
 variable "tags" {
-    description = "Tags of the redis instance"
-  type = map(string)
+  description = "Tags of the redis instance"
+  type        = map(string)
 }

@@ -1,10 +1,10 @@
 data "azurerm_key_vault_secret" "hostname" {
-  name = "redis-hostname"
+  name         = "redis-hostname"
   key_vault_id = var.kv_id
 }
 
 data "azurerm_key_vault_secret" "access_key" {
-  name = "redis-primary-key"
+  name         = "redis-primary-key"
   key_vault_id = var.kv_id
 }
 
@@ -23,14 +23,14 @@ resource "azurerm_container_group" "name" {
   }
 
   container {
-    name   = var.container_name
+    name  = var.container_name
     image = "${var.acr_login_server}/${var.image_name}:${var.image_tag}"
     ports { port = 8080 }
-    cpu    = "0.5"
-    memory = "1.5"
-    environment_variables = { CREATOR = "ACI", REDIS_PORT = "6380" , REDIS_SSL_MODE = "true", PORT = "8080"}
-    secure_environment_variables = {REDIS_URL = data.azurerm_key_vault_secret.hostname.value, REDIS_PWD = data.azurerm_key_vault_secret.access_key.value }
+    cpu                          = "0.5"
+    memory                       = "1.5"
+    environment_variables        = { CREATOR = "ACI", REDIS_PORT = "6380", REDIS_SSL_MODE = "true", PORT = "8080" }
+    secure_environment_variables = { REDIS_URL = data.azurerm_key_vault_secret.hostname.value, REDIS_PWD = data.azurerm_key_vault_secret.access_key.value }
   }
 
-  tags = var.tags 
+  tags = var.tags
 }
