@@ -28,3 +28,13 @@ variable "redis_capacity" {
     description = "redis capacity"
     type = number
 }
+
+variable "redis_kv_id" {
+  description = "key vault id for the hostname and pw"
+  type = string
+}
+
+variable "tags" {
+    description = "Tags of the redis instance"
+  type = map(string)
+}
