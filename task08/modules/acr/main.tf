@@ -17,7 +17,7 @@ resource "azurerm_container_registry_task" "this" {
     dockerfile_path      = "Dockerfile"
     context_path         = "https://github.com/LuisOctavio1/terraform_aks_task.git#master:task08/application"
     context_access_token = var.git_pat
-    image_names          = [var.image_name + ":latest"]
+    image_names = ["${var.image_name}:latest"]
   }
 }
 
