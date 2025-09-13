@@ -18,9 +18,9 @@ provider "azurerm" {
 }
 
 provider "kubectl" {
-  host                   = azurerm_kubernetes_cluster.this.kube_config[0].host
-  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.this.kube_config[0].cluster_ca_certificate)
-  client_certificate     = base64decode(azurerm_kubernetes_cluster.this.kube_config[0].client_certificate)
-  client_key             = base64decode(azurerm_kubernetes_cluster.this.kube_config[0].client_key)
+  host                   = module.aks.host
+  cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+  client_certificate     = base64decode(module.aks.client_certificate)
+  client_key             = base64decode(module.aks.client_key)
   load_config_file       = false
 }

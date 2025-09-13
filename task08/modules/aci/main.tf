@@ -28,7 +28,7 @@ resource "azurerm_container_group" "name" {
     ports { port = 8080 }
     cpu    = "0.5"
     memory = "1.5"
-    environment_variables = { CREATOR = "ACI", REDIS_PORT = "6380" , REDIS_SSL_MODE = "true"}
+    environment_variables = { CREATOR = "ACI", REDIS_PORT = "6380" , REDIS_SSL_MODE = "true", PORT = "8080"}
     secure_environment_variables = {REDIS_URL = data.azurerm_key_vault_secret.hostname.value, REDIS_PWD = data.azurerm_key_vault_secret.access_key.value }
   }
 

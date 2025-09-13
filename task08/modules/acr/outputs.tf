@@ -14,3 +14,9 @@ output "acr_username" {
   value       = azurerm_container_registry.this.admin_username
   sensitive = true
 }
+
+output "acr_id" {
+  description = "acr id"
+  value       = azurerm_container_registry.this.id
+  sensitive = true
+}

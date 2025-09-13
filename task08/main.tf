@@ -60,3 +60,67 @@ module "aci" {
   depends_on = [ module.redis, module.acr ]
   
 }
+
+module "aks" {
+  source = "./modules/aks"
+  aks_name = local.aks_name
+  def_node_name = var.def_node_name
+  def_node_count = var.def_node_count
+  def_node_size = var.def_node_size
+  aks_rg = azurerm_resource_group.rg.name
+  aks_location = azurerm_resource_group.rg.location
+  tags = local.common_tags
+  acr_id = module.acr.acr_id
+  aks_kv_id = module.keyvault.id
+  aks_identity_name = var.aks_identity_name
+  depends_on = [ module.redis, module.acr ]
+}
+
+data "azurerm_client_config" "current" {}
+
+resource "kubectl_manifest" "spc" {
+  yaml_body = templatefile("${path.module}/k8s-manifests/secret-provider.yaml.tftpl", {
+    kv_name                    = module.keyvault.name
+    tenant_id                  = data.azurerm_client_config.current.tenant_id
+    aks_kv_access_identity_id  = module.aks.kv_uami_client_id     
+    redis_url_secret_name      = "redis-hostname"                 
+    redis_password_secret_name = "redis-primary-key"
+  })
+
+  depends_on = [
+    module.aks,               
+    module.keyvault,         
+    module.redis              
+  ]
+}
+
+resource "kubectl_manifest" "deploy" {
+  yaml_body = templatefile("${path.module}/k8s-manifests/deployment.yaml.tftpl", {
+    acr_login_server = module.acr.acr_login_server
+    app_image_name   = var.image_name              
+    image_tag        = var.image_tag               
+  })
+
+  wait_for {
+    field {
+      key   = "status.availableReplicas"
+      value = "1"
+  }
+  }
+
+  depends_on = [
+    kubectl_manifest.spc,
+    module.acr        
+  ]
+}
+
+resource "kubectl_manifest" "svc" {
+  yaml_body  = file("${path.module}/k8s-manifests/service.yaml")
+  depends_on = [kubectl_manifest.deploy]
+}
+
+data "kubernetes_service" "app_svc" {
+  metadata { name = "redis-flask-app-service" }
+  depends_on = [kubectl_manifest.svc]
+}
+

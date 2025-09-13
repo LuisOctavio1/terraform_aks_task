@@ -10,8 +10,10 @@ resource "azurerm_kubernetes_cluster" "this" {
   name = var.aks_name
   resource_group_name = var.aks_rg
   location = var.aks_location
+  dns_prefix = "${var.aks_name}-dns-lo"
 
    key_vault_secrets_provider {
+    secret_rotation_enabled = false
   }
   identity {
     type         = "UserAssigned"
