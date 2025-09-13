@@ -35,3 +35,9 @@ variable "git_pat" {
   sensitive = true  
 }
 
+variable "tags" {
+    description = "key vault tags"
+    type = map(string)
+  
+}
+

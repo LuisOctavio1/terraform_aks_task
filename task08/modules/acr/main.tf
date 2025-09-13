@@ -3,6 +3,7 @@ resource "azurerm_container_registry" "this" {
   resource_group_name = var.acr_resourse_group
   location            = var.acr_location
   sku                 = var.acr_SKU
+  tags = var.tags
 }
 
 resource "azurerm_container_registry_task" "this" {
