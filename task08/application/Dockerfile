@@ -11,4 +11,4 @@ EXPOSE 8080
 ##### #Define environment variable
 ENV NAME World
 ##### #Run app.py when the container launches
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app", "--timeout", "120", "--workers", "2"]
+CMD ["python", "app.py"]

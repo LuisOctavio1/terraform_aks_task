@@ -26,6 +26,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     node_count = var.def_node_count
     vm_size = var.def_node_size
     os_disk_type = "Ephemeral"
+    os_disk_size_gb  = 64
   }
 
   tags = var.tags
