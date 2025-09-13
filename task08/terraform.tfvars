@@ -1,5 +1,5 @@
 creator           = "luis_torres2@epam.com"
-rg_location       = "East US2"
+rg_location       = "East US 2"
 container_name    = "cmtr-y010np4n-mod8-ci"
 image_name        = "cmtr-y010np4n-mod8-app"
 image_tag         = "latest"
