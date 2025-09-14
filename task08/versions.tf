@@ -12,6 +12,11 @@ terraform {
   }
 }
 
+resource "time_sleep" "wait_for_aks" {
+  depends_on      = [module.aks]
+  create_duration = "120s" # 90–120s suele ser suficiente
+}
+
 provider "azurerm" {
   features {}
   subscription_id = "e89aa100-8549-438b-8092-29f3affd8c2a"

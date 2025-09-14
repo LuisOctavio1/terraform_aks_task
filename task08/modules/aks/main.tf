@@ -42,7 +42,7 @@ resource "azurerm_role_assignment" "this" {
 resource "azurerm_key_vault_access_policy" "this" {
   key_vault_id       = var.aks_kv_id
   tenant_id          = data.azurerm_client_config.current.tenant_id
-  object_id          = azurerm_user_assigned_identity.aks_kv_uami.principal_id
+  object_id          = azurerm_kubernetes_cluster.this.kubelet_identity[0].object_id
   secret_permissions = ["Get", "List"]
   depends_on         = [azurerm_kubernetes_cluster.this]
 

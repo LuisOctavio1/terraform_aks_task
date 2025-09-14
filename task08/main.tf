@@ -82,12 +82,13 @@ resource "kubectl_manifest" "spc" {
   yaml_body = templatefile("${path.module}/k8s-manifests/secret-provider.yaml.tftpl", {
     kv_name                    = module.keyvault.name
     tenant_id                  = data.azurerm_client_config.current.tenant_id
-    aks_kv_access_identity_id  = module.aks.kv_uami_client_id
+    aks_kv_access_identity_id  = module.aks.kubelet_client_id
     redis_url_secret_name      = "redis-hostname"
     redis_password_secret_name = "redis-primary-key"
   })
 
   depends_on = [
+    time_sleep.wait_for_aks,
     module.aks,
     module.keyvault,
     module.redis
@@ -109,6 +110,7 @@ resource "kubectl_manifest" "deploy" {
   }
 
   depends_on = [
+    time_sleep.wait_for_aks,
     kubectl_manifest.spc,
     module.acr
   ]
@@ -116,7 +118,7 @@ resource "kubectl_manifest" "deploy" {
 
 resource "kubectl_manifest" "svc" {
   yaml_body  = file("${path.module}/k8s-manifests/service.yaml")
-  depends_on = [kubectl_manifest.deploy]
+  depends_on = [kubectl_manifest.deploy, time_sleep.wait_for_aks]
 }
 
 data "kubernetes_service" "app_svc" {

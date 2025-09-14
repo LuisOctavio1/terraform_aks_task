@@ -15,7 +15,7 @@ output "client_key" {
   value       = azurerm_kubernetes_cluster.this.kube_config[0].client_key
 }
 
-output "kv_uami_client_id" {
+output "kubelet_client_id" {
   description = "uami"
-  value       = azurerm_user_assigned_identity.aks_kv_uami.client_id
+  value       = azurerm_kubernetes_cluster.this.kubelet_identity[0].client_id
 }

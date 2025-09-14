@@ -5,6 +5,12 @@ resource "azurerm_container_registry" "this" {
   sku                 = var.acr_SKU
   tags                = var.tags
   admin_enabled       = true
+  timeouts {
+    create = "60m"
+    read   = "10m"
+    update = "60m"
+    delete = "60m"
+  }
 }
 
 resource "azurerm_container_registry_task" "this" {
@@ -19,6 +25,7 @@ resource "azurerm_container_registry_task" "this" {
     context_access_token = var.git_pat
     image_names          = ["${var.image_name}:latest"]
   }
+  timeouts { create = "60m" }
 }
 
 resource "azurerm_container_registry_task_schedule_run_now" "this" {
