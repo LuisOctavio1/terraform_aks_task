@@ -76,11 +76,6 @@ module "aks" {
   depends_on        = [module.redis, module.acr]
 }
 
-resource "time_sleep" "wait_for_aks" {
-  depends_on      = [module.aks]
-  create_duration = "120s"
-}
-
 data "azurerm_client_config" "current" {}
 
 resource "kubectl_manifest" "spc" {
@@ -93,7 +88,6 @@ resource "kubectl_manifest" "spc" {
   })
 
   depends_on = [
-    time_sleep.wait_for_aks,
     module.aks,
     module.keyvault,
     module.redis
@@ -134,13 +128,7 @@ resource "kubectl_manifest" "svc" {
 
 }
 
-resource "time_sleep" "wait_for_lb" {
-  depends_on      = [kubectl_manifest.svc]
-  create_duration = "60s"
-}
-
 data "kubernetes_service" "app_svc" {
-
   metadata { name = "redis-flask-app-service" }
   depends_on = [kubectl_manifest.svc]
 }
