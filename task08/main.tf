@@ -122,8 +122,16 @@ resource "kubectl_manifest" "deploy" {
 }
 
 resource "kubectl_manifest" "svc" {
-  yaml_body  = file("${path.module}/k8s-manifests/service.yaml")
+  yaml_body = file("${path.module}/k8s-manifests/service.yaml")
+  wait_for {
+    field {
+      key        = "status.loadBalancer.ingress.[0].ip"
+      value      = "^(\\d+(\\.|$)){4}"
+      value_type = "regex"
+    }
+  }
   depends_on = [kubectl_manifest.deploy, time_sleep.wait_for_aks]
+
 }
 
 resource "time_sleep" "wait_for_lb" {
@@ -132,6 +140,7 @@ resource "time_sleep" "wait_for_lb" {
 }
 
 data "kubernetes_service" "app_svc" {
+
   metadata { name = "redis-flask-app-service" }
   depends_on = [kubectl_manifest.svc]
 }
