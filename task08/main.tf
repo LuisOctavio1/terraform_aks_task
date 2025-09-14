@@ -124,7 +124,7 @@ resource "kubectl_manifest" "svc" {
       value_type = "regex"
     }
   }
-  depends_on = [kubectl_manifest.deploy, time_sleep.wait_for_aks]
+  depends_on = [kubectl_manifest.deploy]
 
 }
 
