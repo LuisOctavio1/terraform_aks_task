@@ -76,6 +76,11 @@ module "aks" {
   depends_on        = [module.redis, module.acr]
 }
 
+resource "time_sleep" "wait_for_aks" {
+  depends_on      = [module.aks]
+  create_duration = "120s"
+}
+
 data "azurerm_client_config" "current" {}
 
 resource "kubectl_manifest" "spc" {
@@ -119,6 +124,11 @@ resource "kubectl_manifest" "deploy" {
 resource "kubectl_manifest" "svc" {
   yaml_body  = file("${path.module}/k8s-manifests/service.yaml")
   depends_on = [kubectl_manifest.deploy, time_sleep.wait_for_aks]
+}
+
+resource "time_sleep" "wait_for_lb" {
+  depends_on      = [kubectl_manifest.svc]
+  create_duration = "60s"
 }
 
 data "kubernetes_service" "app_svc" {

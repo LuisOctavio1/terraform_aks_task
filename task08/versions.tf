@@ -9,12 +9,15 @@ terraform {
       source  = "alekc/kubectl"
       version = "~> 2.0"
     }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.31"
+    }
+    time = {
+      source  = "hashicorp/time"
+      version = "~> 0.9"
+    }
   }
-}
-
-resource "time_sleep" "wait_for_aks" {
-  depends_on      = [module.aks]
-  create_duration = "120s" # 90–120s suele ser suficiente
 }
 
 provider "azurerm" {
@@ -28,4 +31,11 @@ provider "kubectl" {
   client_certificate     = base64decode(module.aks.client_certificate)
   client_key             = base64decode(module.aks.client_key)
   load_config_file       = false
+}
+
+provider "kubernetes" {
+  host                   = module.aks.host
+  cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+  client_certificate     = base64decode(module.aks.client_certificate)
+  client_key             = base64decode(module.aks.client_key)
 }
