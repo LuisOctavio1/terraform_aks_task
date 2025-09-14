@@ -109,7 +109,7 @@ resource "kubectl_manifest" "deploy" {
   }
 
   depends_on = [
-    time_sleep.wait_for_aks,
+    module.aks,
     kubectl_manifest.spc,
     module.acr
   ]
