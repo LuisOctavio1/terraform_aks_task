@@ -2,7 +2,7 @@
 variable "name_prefix" {
   description = "Prefix for names"
   type        = string
-  default     = "cmaz-y010np4n-mod8"
+  default     = "cmtr-y010np4n-mod8"
 }
 
 variable "rg_location" {
